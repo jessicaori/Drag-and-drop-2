@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablero Kan Ban</title>
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        .board {
+            display: flex;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .column {
+            width: 33.33%;
+            padding: 20px;
+            box-sizing: border-box;
+            border: 1px solid #555;
+            background-color: #333;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .task {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #555;
+            border: 1px solid #444;
+            color: #ccc;
+            cursor: move;
+            transition: background-color 0.3s;
+        }
+
+        .task:hover {
+            background-color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="board">
+        <div class="column" id="toDo">
+            <h2>Pendientes</h2>
+            <div class="task" draggable="true">Producto 1</div>
+            <div class="task" draggable="true">Producto 2</div>
+        </div>
+        <div class="column" id="inProgress">
+            <h2>Revisados</h2>
+        </div>
+        <div class="column" id="done">
+            <h2>Comprados</h2>
+        </div>
+    </div>
+
+    <script>
+        let draggedTask;
+
+        function dragStart(event) {
+            draggedTask = event.target;
+            event.dataTransfer.effectAllowed = 'move';
+        }
+
+        function dragOver(event) {
+            event.preventDefault();
+            return false;
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            let dropZone = event.target.closest('.column');
+            dropZone.appendChild(draggedTask);
+        }
+
+        let tasks = document.querySelectorAll('.task');
+        tasks.forEach(task => {
+            task.addEventListener('dragstart', dragStart);
+        });
+
+        let columns = document.querySelectorAll('.column');
+        columns.forEach(column => {
+            column.addEventListener('dragover', dragOver);
+            column.addEventListener('drop', drop);
+        });
+    </script>
+</body>
+</html>
